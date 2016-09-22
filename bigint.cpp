@@ -31,7 +31,12 @@ BigInt &BigInt::operator=(ulong x) {
 BigInt &BigInt::operator=(const std::string &str) {
     value = 0;
 
-    for (unsigned int i = 0; i < str.size(); i++) {
+    uint i = 0;
+
+    while (isspace(str[i]))
+        i++;
+
+    for (; i < str.size(); i++) {
         if (!isdigit(str[i]))
             break;
 

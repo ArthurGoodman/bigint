@@ -2,6 +2,7 @@
 
 #include <string>
 
+typedef unsigned int uint;
 typedef unsigned long long ulong;
 
 class BigInt {
