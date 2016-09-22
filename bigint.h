@@ -1,29 +1,36 @@
 #pragma once
 
-#include <vector>
+#include <string>
 
-typedef unsigned char byte;
 typedef unsigned long long ulong;
 
-#define BASE 256
-
 class BigInt {
-    std::vector<byte> data;
+    ulong value;
 
 public:
     BigInt();
     BigInt(ulong x);
+    BigInt(const std::string &str);
     BigInt(const BigInt &x);
     BigInt(BigInt &&x);
 
+    BigInt &operator=(ulong x);
+    BigInt &operator=(const std::string &str);
     BigInt &operator=(const BigInt &x);
     BigInt &operator=(BigInt &&x);
 
-    BigInt operator+(const BigInt &x);
-    BigInt operator-(const BigInt &x);
-    BigInt operator*(const BigInt &x);
-    BigInt operator/(const BigInt &x);
-    BigInt operator%(const BigInt &x);
+    bool operator==(const BigInt &x) const;
+    bool operator!=(const BigInt &x) const;
+    bool operator<(const BigInt &x) const;
+    bool operator<=(const BigInt &x) const;
+    bool operator>(const BigInt &x) const;
+    bool operator>=(const BigInt &x) const;
+
+    BigInt operator+(const BigInt &x) const;
+    BigInt operator-(const BigInt &x) const;
+    BigInt operator*(const BigInt &x) const;
+    BigInt operator/(const BigInt &x) const;
+    BigInt operator%(const BigInt &x) const;
 
     BigInt &operator+=(const BigInt &x);
     BigInt &operator-=(const BigInt &x);
@@ -31,6 +38,8 @@ public:
     BigInt &operator/=(const BigInt &x);
     BigInt &operator%=(const BigInt &x);
 
-    BigInt pow(ulong x);
-    BigInt pow(const BigInt &x);
+    BigInt pow(ulong x) const;
+    BigInt pow(const BigInt &x) const;
+
+    std::string toString() const;
 };
