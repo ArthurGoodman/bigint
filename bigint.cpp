@@ -30,11 +30,15 @@ BigInt &BigInt::operator=(ulong x) {
 
 BigInt &BigInt::operator=(const std::string &str) {
     value = 0;
-    ulong t = 1;
 
-    for (std::string::const_reverse_iterator i = str.rbegin(); i != str.rend(); ++i) {
-        value += t * (*i - '0');
-        t *= 10;
+    for (unsigned int i = 0; i < str.size(); i++) {
+        if (!isdigit(str[i]))
+            break;
+
+        value += str[i] - '0';
+
+        if (isdigit(str[i + 1]))
+            value *= 10;
     }
 
     return *this;
@@ -95,28 +99,23 @@ BigInt BigInt::operator%(const BigInt &x) const {
 }
 
 BigInt &BigInt::operator+=(const BigInt &x) {
-    *this = *this + x;
-    return *this;
+    return *this = *this + x;
 }
 
 BigInt &BigInt::operator-=(const BigInt &x) {
-    *this = *this - x;
-    return *this;
+    return *this = *this - x;
 }
 
 BigInt &BigInt::operator*=(const BigInt &x) {
-    *this = *this * x;
-    return *this;
+    return *this = *this * x;
 }
 
 BigInt &BigInt::operator/=(const BigInt &x) {
-    *this = *this / x;
-    return *this;
+    return *this = *this / x;
 }
 
 BigInt &BigInt::operator%=(const BigInt &x) {
-    *this = *this % x;
-    return *this;
+    return *this = *this % x;
 }
 
 BigInt BigInt::pow(ulong x) const {
