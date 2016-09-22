@@ -1,10 +1,11 @@
 #include "bigint.h"
 
 #include <sstream>
-#include <cmath>
 
-BigInt::BigInt()
-    : value(0) {
+#include <iostream>
+
+BigInt::BigInt() {
+    data.push_back(0);
 }
 
 BigInt::BigInt(ulong x) {
@@ -24,83 +25,93 @@ BigInt::BigInt(BigInt &&x) {
 }
 
 BigInt &BigInt::operator=(ulong x) {
-    value = x;
+    data.clear();
+
+    do {
+        data.push_back(x % Base);
+        x /= Base;
+    } while (x > 0);
+
     return *this;
 }
 
 BigInt &BigInt::operator=(const std::string &str) {
-    value = 0;
+    data.clear();
 
-    uint i = 0;
+    int i;
+    std::stringstream stream;
 
-    while (isspace(str[i]))
-        i++;
+    for (i = str.size() - DecimalDigitsPerBigDigit; i >= 0; i -= DecimalDigitsPerBigDigit) {
+        stream << str.substr(i, DecimalDigitsPerBigDigit);
 
-    for (; i < str.size(); i++) {
-        if (!isdigit(str[i]))
-            break;
+        data.push_back(0);
+        stream >> data.back();
 
-        value += str[i] - '0';
+        stream.clear();
+    }
 
-        if (isdigit(str[i + 1]))
-            value *= 10;
+    if (i > -DecimalDigitsPerBigDigit) {
+        stream << str.substr(0, DecimalDigitsPerBigDigit + i);
+
+        data.push_back(0);
+        stream >> data.back();
     }
 
     return *this;
 }
 
 BigInt &BigInt::operator=(const BigInt &x) {
-    value = x.value;
+    data = x.data;
     return *this;
 }
 
 BigInt &BigInt::operator=(BigInt &&x) {
-    value = x.value;
+    data = std::move(x.data);
     return *this;
 }
 
 bool BigInt::operator==(const BigInt &x) const {
-    return value == x.value;
+    return true;
 }
 
 bool BigInt::operator!=(const BigInt &x) const {
-    return value != x.value;
+    return true;
 }
 
 bool BigInt::operator<(const BigInt &x) const {
-    return value < x.value;
+    return true;
 }
 
 bool BigInt::operator<=(const BigInt &x) const {
-    return value <= x.value;
+    return true;
 }
 
 bool BigInt::operator>(const BigInt &x) const {
-    return value > x.value;
+    return true;
 }
 
 bool BigInt::operator>=(const BigInt &x) const {
-    return value >= x.value;
+    return true;
 }
 
 BigInt BigInt::operator+(const BigInt &x) const {
-    return value + x.value;
+    return *this;
 }
 
 BigInt BigInt::operator-(const BigInt &x) const {
-    return value - x.value;
+    return *this;
 }
 
 BigInt BigInt::operator*(const BigInt &x) const {
-    return value * x.value;
+    return *this;
 }
 
 BigInt BigInt::operator/(const BigInt &x) const {
-    return value / x.value;
+    return *this;
 }
 
 BigInt BigInt::operator%(const BigInt &x) const {
-    return value % x.value;
+    return *this;
 }
 
 BigInt &BigInt::operator+=(const BigInt &x) {
@@ -124,15 +135,29 @@ BigInt &BigInt::operator%=(const BigInt &x) {
 }
 
 BigInt BigInt::pow(ulong x) const {
-    return ::pow(value, x);
+    return *this;
 }
 
 BigInt BigInt::pow(const BigInt &x) const {
-    return ::pow(value, x.value);
+    return *this;
 }
 
 std::string BigInt::toString() const {
     std::stringstream stream;
-    stream << value;
+
+    stream << data.back();
+
+    for (int i = data.size() - 2; i >= 0; i--)
+        stream << data[i];
+
     return stream.str();
+}
+
+void BigInt::dump() const {
+    std::cout << "{ ";
+
+    for (uint i : data)
+        std::cout << i << " ";
+
+    std::cout << "}\n";
 }

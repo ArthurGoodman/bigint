@@ -1,12 +1,16 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 typedef unsigned int uint;
 typedef unsigned long long ulong;
 
 class BigInt {
-    ulong value;
+    static const uint Base = 1e9;
+    static const int DecimalDigitsPerBigDigit = 9;
+
+    std::vector<uint> data;
 
 public:
     BigInt();
@@ -43,4 +47,6 @@ public:
     BigInt pow(const BigInt &x) const;
 
     std::string toString() const;
+
+    void dump() const;
 };
