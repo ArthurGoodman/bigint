@@ -5,7 +5,6 @@
 #include <iostream>
 
 BigInt::BigInt() {
-    data.push_back(0);
 }
 
 BigInt::BigInt(ulong x) {
@@ -27,6 +26,9 @@ BigInt::BigInt(BigInt &&x) {
 BigInt &BigInt::operator=(ulong x) {
     data.clear();
 
+    if (x == 0)
+        return *this;
+
     do {
         data.push_back(x % Base);
         x /= Base;
@@ -37,6 +39,9 @@ BigInt &BigInt::operator=(ulong x) {
 
 BigInt &BigInt::operator=(const std::string &str) {
     data.clear();
+
+    if (str.empty())
+        return *this;
 
     int i;
     std::stringstream stream;
@@ -75,7 +80,7 @@ bool BigInt::operator==(const BigInt &x) const {
 }
 
 bool BigInt::operator!=(const BigInt &x) const {
-    return true;
+    return !(*this == x);
 }
 
 bool BigInt::operator<(const BigInt &x) const {
@@ -83,19 +88,39 @@ bool BigInt::operator<(const BigInt &x) const {
 }
 
 bool BigInt::operator<=(const BigInt &x) const {
-    return true;
+    return *this < x || *this == x;
 }
 
 bool BigInt::operator>(const BigInt &x) const {
-    return true;
+    return !(*this <= x);
 }
 
 bool BigInt::operator>=(const BigInt &x) const {
-    return true;
+    return !(*this < x);
 }
 
 BigInt BigInt::operator+(const BigInt &x) const {
-    return *this;
+    if (data.empty())
+        return x;
+
+    if (x.data.empty())
+        return *this;
+
+    BigInt result;
+    result.data.resize(std::max(data.size(), x.data.size()));
+
+    ulong sum, carry = 0;
+
+    for (uint i = 0; i < result.data.size(); i++) {
+        sum = data[i] + x.data[i] + carry;
+        result.data[i] = sum % Base;
+        carry = sum / Base;
+    }
+
+    if (carry > 0)
+        result.data.push_back(carry);
+
+    return result;
 }
 
 BigInt BigInt::operator-(const BigInt &x) const {
@@ -143,6 +168,9 @@ BigInt BigInt::pow(const BigInt &x) const {
 }
 
 std::string BigInt::toString() const {
+    if (data.empty())
+        return "0";
+
     std::stringstream stream;
 
     stream << data.back();
