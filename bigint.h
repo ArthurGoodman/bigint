@@ -19,11 +19,11 @@ public:
     BigInt &operator=(const BigInt &x);
     BigInt &operator=(BigInt &&x);
 
-    BigInt &operator+(const BigInt &x);
-    BigInt &operator-(const BigInt &x);
-    BigInt &operator*(const BigInt &x);
-    BigInt &operator/(const BigInt &x);
-    BigInt &operator%(const BigInt &x);
+    BigInt operator+(const BigInt &x);
+    BigInt operator-(const BigInt &x);
+    BigInt operator*(const BigInt &x);
+    BigInt operator/(const BigInt &x);
+    BigInt operator%(const BigInt &x);
 
     BigInt &operator+=(const BigInt &x);
     BigInt &operator-=(const BigInt &x);

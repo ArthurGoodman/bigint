@@ -24,27 +24,33 @@ BigInt &BigInt::operator=(BigInt &&x) {
     return *this;
 }
 
-BigInt &BigInt::operator+(const BigInt &x) {
+BigInt BigInt::operator+(const BigInt &x) {
     BigInt result(*this);
     result += x;
     return result;
 }
 
-BigInt &BigInt::operator-(const BigInt &x) {
+BigInt BigInt::operator-(const BigInt &x) {
     BigInt result(*this);
     result -= x;
     return result;
 }
 
-BigInt &BigInt::operator*(const BigInt &x) {
+BigInt BigInt::operator*(const BigInt &x) {
     BigInt result(*this);
     result *= x;
     return result;
 }
 
-BigInt &BigInt::operator/(const BigInt &x) {
+BigInt BigInt::operator/(const BigInt &x) {
     BigInt result(*this);
     result /= x;
+    return result;
+}
+
+BigInt BigInt::operator%(const BigInt &x) {
+    BigInt result(*this);
+    result %= x;
     return result;
 }
 
@@ -61,6 +67,10 @@ BigInt &BigInt::operator*=(const BigInt &x) {
 }
 
 BigInt &BigInt::operator/=(const BigInt &x) {
+    return *this;
+}
+
+BigInt &BigInt::operator%=(const BigInt &x) {
     return *this;
 }
 
