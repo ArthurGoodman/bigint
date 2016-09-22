@@ -1,6 +1,7 @@
 #include "bigint.h"
 
 #include <sstream>
+#include <cmath>
 
 #include <iostream>
 
@@ -76,6 +77,13 @@ BigInt &BigInt::operator=(BigInt &&x) {
 }
 
 bool BigInt::operator==(const BigInt &x) const {
+    if (data.size() != x.data.size())
+        return false;
+    else
+        for (uint i = 0; i < data.size(); i++)
+            if (data[i] != x.data[i])
+                return false;
+
     return true;
 }
 
@@ -84,7 +92,18 @@ bool BigInt::operator!=(const BigInt &x) const {
 }
 
 bool BigInt::operator<(const BigInt &x) const {
-    return true;
+    if (data.size() < x.data.size())
+        return true;
+    else if (data.size() > x.data.size())
+        return false;
+    else
+        for (int i = (int)data.size() - 1; i >= 0; i--)
+            if (data[i] < x.data[i])
+                return true;
+            else if (data[i] > x.data[i])
+                return false;
+
+    return false;
 }
 
 bool BigInt::operator<=(const BigInt &x) const {
@@ -109,7 +128,8 @@ BigInt BigInt::operator+(const BigInt &x) const {
     BigInt result;
     result.data.resize(std::max(data.size(), x.data.size()));
 
-    ulong sum, carry = 0;
+    ulong sum;
+    uint carry = 0;
 
     for (uint i = 0; i < result.data.size(); i++) {
         sum = data[i] + x.data[i] + carry;
@@ -124,7 +144,31 @@ BigInt BigInt::operator+(const BigInt &x) const {
 }
 
 BigInt BigInt::operator-(const BigInt &x) const {
-    return *this;
+    if (data.empty())
+        return x;
+
+    if (x.data.empty())
+        return *this;
+
+    bool zero = true;
+
+    BigInt minuend(*this > x ? *this : x);
+    const BigInt &subtrahend = *this > x ? x : *this;
+    uint size = std::min(data.size(), x.data.size());
+
+    for (uint i = 0; i < size; i++) {
+        if (minuend.data[i] >= subtrahend.data[i])
+            minuend.data[i] -= subtrahend.data[i];
+        else {
+            minuend.data[i] = (ulong)Base + minuend.data[i] - subtrahend.data[i];
+            minuend.data[i + 1]--;
+        }
+
+        if (zero && minuend.data[i] != 0)
+            zero = false;
+    }
+
+    return zero ? BigInt() : minuend;
 }
 
 BigInt BigInt::operator*(const BigInt &x) const {
@@ -176,7 +220,7 @@ std::string BigInt::toString() const {
     stream << data.back();
 
     for (int i = data.size() - 2; i >= 0; i--)
-        stream << data[i];
+        stream << std::string(DecimalDigitsPerBigDigit - log10(data[i]), '0') << data[i];
 
     return stream.str();
 }
