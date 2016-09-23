@@ -61,6 +61,8 @@ BigInt &BigInt::operator=(const std::string &str) {
         stream >> data.back();
     }
 
+    normalize();
+
     return *this;
 }
 
@@ -161,8 +163,7 @@ BigInt BigInt::operator-(const BigInt &x) const {
         minuend.data[i] -= digit;
     }
 
-    for (int i = minuend.data.size() - 1; i >= 0 && minuend.data[i] == 0; i--)
-        minuend.data.pop_back();
+    minuend.normalize();
 
     return minuend;
 }
@@ -203,11 +204,11 @@ BigInt BigInt::operator*(uint x) const {
 }
 
 BigInt BigInt::operator/(const BigInt &x) const {
-    return *this;
+    return divide(x).first;
 }
 
 BigInt BigInt::operator%(const BigInt &x) const {
-    return *this;
+    return divide(x).second;
 }
 
 BigInt &BigInt::operator+=(const BigInt &x) {
@@ -230,6 +231,28 @@ BigInt &BigInt::operator%=(const BigInt &x) {
     return *this = *this % x;
 }
 
+BigInt &BigInt::operator++() {
+    *this += 1;
+    return *this;
+}
+
+BigInt BigInt::operator++(int) {
+    BigInt result = *this;
+    ++*this;
+    return result;
+}
+
+BigInt &BigInt::operator--() {
+    *this -= 1;
+    return *this;
+}
+
+BigInt BigInt::operator--(int) {
+    BigInt result = *this;
+    --*this;
+    return result;
+}
+
 BigInt BigInt::pow(ulong x) const {
     return *this;
 }
@@ -250,6 +273,25 @@ std::string BigInt::toString() const {
         stream << std::string(DecimalDigitsPerBigDigit - (data[i] == 0 ? 1 : log10(data[i])), '0') << data[i];
 
     return stream.str();
+}
+
+void BigInt::normalize() {
+    for (int i = data.size() - 1; i >= 0 && data[i] == 0; i--)
+        data.pop_back();
+}
+
+std::pair<BigInt, BigInt> BigInt::divide(const BigInt &x) const {
+    if (x.data.empty())
+        throw std::runtime_error("division by zero");
+
+    BigInt q, r = *this;
+
+    while (r >= x) {
+        q++;
+        r -= x;
+    }
+
+    return std::make_pair(q, r);
 }
 
 #include <iostream>

@@ -44,10 +44,20 @@ public:
     BigInt &operator/=(const BigInt &x);
     BigInt &operator%=(const BigInt &x);
 
+    BigInt &operator++();
+    BigInt operator++(int);
+    BigInt &operator--();
+    BigInt operator--(int);
+
     BigInt pow(ulong x) const;
     BigInt pow(const BigInt &x) const;
 
     std::string toString() const;
 
+private:
+    void normalize();
+    std::pair<BigInt, BigInt> divide(const BigInt &x) const;
+
+public:
     void dump() const;
 };
