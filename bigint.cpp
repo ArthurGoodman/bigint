@@ -129,7 +129,7 @@ BigInt BigInt::operator+(const BigInt &x) const {
     uint carry = 0;
 
     for (uint i = 0; i < result.data.size(); i++) {
-        ulong sum = data[i] + x.data[i] + carry;
+        ulong sum = (i < data.size() ? data[i] : 0) + (i < x.data.size() ? x.data[i] : 0) + carry;
         result.data[i] = sum % Base;
         carry = sum / Base;
     }
@@ -168,7 +168,38 @@ BigInt BigInt::operator-(const BigInt &x) const {
 }
 
 BigInt BigInt::operator*(const BigInt &x) const {
-    return *this;
+    BigInt result = x * data[0];
+
+    for (uint i = 1; i < data.size(); i++) {
+        BigInt temp = x * data[i];
+
+        if (!temp.data.empty())
+            temp.data.insert(temp.data.begin(), i, 0);
+
+        result += temp;
+    }
+
+    return result;
+}
+
+BigInt BigInt::operator*(ulong x) const {
+    if (x == 0 || data.empty())
+        return BigInt();
+
+    BigInt result(*this);
+
+    ulong carry = 0;
+
+    for (uint i = 0; i < result.data.size(); i++) {
+        ulong temp = result.data[i] * x + carry;
+        result.data[i] = temp % Base;
+        carry = temp / Base;
+    }
+
+    if (carry > 0)
+        result.data.push_back(carry);
+
+    return result;
 }
 
 BigInt BigInt::operator/(const BigInt &x) const {
@@ -216,7 +247,7 @@ std::string BigInt::toString() const {
     stream << data.back();
 
     for (int i = data.size() - 2; i >= 0; i--)
-        stream << std::string(DecimalDigitsPerBigDigit - log10(data[i]), '0') << data[i];
+        stream << std::string(DecimalDigitsPerBigDigit - (data[i] == 0 ? 1 : log10(data[i])), '0') << data[i];
 
     return stream.str();
 }
