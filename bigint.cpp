@@ -3,8 +3,6 @@
 #include <sstream>
 #include <cmath>
 
-#include <iostream>
-
 BigInt::BigInt() {
 }
 
@@ -128,11 +126,10 @@ BigInt BigInt::operator+(const BigInt &x) const {
     BigInt result;
     result.data.resize(std::max(data.size(), x.data.size()));
 
-    ulong sum;
     uint carry = 0;
 
     for (uint i = 0; i < result.data.size(); i++) {
-        sum = data[i] + x.data[i] + carry;
+        ulong sum = data[i] + x.data[i] + carry;
         result.data[i] = sum % Base;
         carry = sum / Base;
     }
@@ -150,25 +147,24 @@ BigInt BigInt::operator-(const BigInt &x) const {
     if (x.data.empty())
         return *this;
 
-    bool zero = true;
-
-    BigInt minuend(*this > x ? *this : x);
+    BigInt minuend = *this > x ? *this : x;
     const BigInt &subtrahend = *this > x ? x : *this;
-    uint size = std::min(data.size(), x.data.size());
 
-    for (uint i = 0; i < size; i++) {
-        if (minuend.data[i] >= subtrahend.data[i])
-            minuend.data[i] -= subtrahend.data[i];
-        else {
-            minuend.data[i] = (ulong)Base + minuend.data[i] - subtrahend.data[i];
+    for (uint i = 0; i < minuend.data.size(); i++) {
+        long long digit = (i < subtrahend.data.size() ? subtrahend.data[i] : 0);
+
+        if (minuend.data[i] < digit) {
+            minuend.data[i] += Base;
             minuend.data[i + 1]--;
         }
 
-        if (zero && minuend.data[i] != 0)
-            zero = false;
+        minuend.data[i] -= digit;
     }
 
-    return zero ? BigInt() : minuend;
+    for (int i = minuend.data.size() - 1; i >= 0 && minuend.data[i] == 0; i--)
+        minuend.data.pop_back();
+
+    return minuend;
 }
 
 BigInt BigInt::operator*(const BigInt &x) const {
@@ -224,6 +220,8 @@ std::string BigInt::toString() const {
 
     return stream.str();
 }
+
+#include <iostream>
 
 void BigInt::dump() const {
     std::cout << "{ ";
