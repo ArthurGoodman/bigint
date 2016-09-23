@@ -129,7 +129,7 @@ BigInt BigInt::operator+(const BigInt &x) const {
     uint carry = 0;
 
     for (uint i = 0; i < result.data.size(); i++) {
-        ulong sum = (i < data.size() ? data[i] : 0) + (i < x.data.size() ? x.data[i] : 0) + carry;
+        uint sum = (i < data.size() ? data[i] : 0) + (i < x.data.size() ? x.data[i] : 0) + carry;
         result.data[i] = sum % Base;
         carry = sum / Base;
     }
@@ -182,7 +182,7 @@ BigInt BigInt::operator*(const BigInt &x) const {
     return result;
 }
 
-BigInt BigInt::operator*(ulong x) const {
+BigInt BigInt::operator*(uint x) const {
     if (x == 0 || data.empty())
         return BigInt();
 
@@ -191,7 +191,7 @@ BigInt BigInt::operator*(ulong x) const {
     ulong carry = 0;
 
     for (uint i = 0; i < result.data.size(); i++) {
-        ulong temp = result.data[i] * x + carry;
+        ulong temp = (ulong)result.data[i] * x + carry;
         result.data[i] = temp % Base;
         carry = temp / Base;
     }

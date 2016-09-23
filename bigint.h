@@ -34,7 +34,7 @@ public:
     BigInt operator+(const BigInt &x) const;
     BigInt operator-(const BigInt &x) const;
     BigInt operator*(const BigInt &x) const;
-    BigInt operator*(ulong x) const;
+    BigInt operator*(uint x) const;
     BigInt operator/(const BigInt &x) const;
     BigInt operator%(const BigInt &x) const;
 
