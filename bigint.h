@@ -10,7 +10,7 @@ class BigInt {
     static const uint Base = 1e9;
     static const int DecimalDigitsPerBigDigit = 9;
 
-    std::vector<long long> data;
+    std::vector<uint> data;
 
 public:
     BigInt();

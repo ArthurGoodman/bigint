@@ -151,9 +151,9 @@ BigInt BigInt::operator-(const BigInt &x) const {
     const BigInt &subtrahend = *this > x ? x : *this;
 
     for (uint i = 0; i < minuend.data.size(); i++) {
-        long long digit = (i < subtrahend.data.size() ? subtrahend.data[i] : 0);
+        uint digit = (i < subtrahend.data.size() ? subtrahend.data[i] : 0);
 
-        if (minuend.data[i] < digit) {
+        if (minuend.data[i] < digit || minuend.data[i] == UINT_MAX) {
             minuend.data[i] += Base;
             minuend.data[i + 1]--;
         }
