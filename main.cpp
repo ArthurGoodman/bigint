@@ -191,9 +191,9 @@ int main() {
     printVector(unpairVector(x, vector.size()));
     std::cout << "\n";
 
-    x = pair(modPairVector(vector, 256), 256);
+    x = modPairVector(vector, 256);
     std::cout << x << "\n";
-    printVector(modUnpairVector(unpair(x).first, vector.size(), 256));
+    printVector(modUnpairVector(x, vector.size(), 256));
     std::cout << "\n";
 
     x = pairTree(vector);
@@ -201,9 +201,9 @@ int main() {
     printVector(unpairTree(x, vector.size()));
     std::cout << "\n";
 
-    x = pair(modPairTree(vector, 256), 256);
+    x = modPairTree(vector, 256);
     std::cout << x << "\n";
-    printVector(modUnpairTree(unpair(x).first, vector.size(), 256));
+    printVector(modUnpairTree(x, vector.size(), 256));
     std::cout << "\n";
 
     return 0;
