@@ -20,8 +20,8 @@ BigInt modPair(const BigInt &x, const BigInt &y, const BigInt &mod) {
 }
 
 std::pair<BigInt, BigInt> modUnpair(const BigInt &z, const BigInt &mod) {
-    const std::pair<BigInt, BigInt> &result = z.divide(mod);
-    return std::make_pair(result.second, result.first);
+    const std::pair<BigInt, BigInt> &qr = z.divide(mod);
+    return std::make_pair(qr.second, qr.first);
 }
 
 BigInt pairVector(const std::vector<BigInt> &vector) {
@@ -37,9 +37,9 @@ std::vector<BigInt> unpairVector(BigInt z, int size) {
     std::vector<BigInt> vector;
 
     for (int i = 0; i < size - 1; i++) {
-        std::pair<BigInt, BigInt> pair = unpair(z);
-        vector.push_back(pair.first);
-        z = pair.second;
+        const std::pair<BigInt, BigInt> &xy = unpair(z);
+        vector.push_back(xy.first);
+        z = xy.second;
     }
 
     vector.push_back(z);
@@ -60,9 +60,9 @@ std::vector<BigInt> modUnpairVector(BigInt z, int size, const BigInt &mod) {
     std::vector<BigInt> vector;
 
     for (int i = 0; i < size - 1; i++) {
-        std::pair<BigInt, BigInt> pair = modUnpair(z, mod);
-        vector.push_back(pair.first);
-        z = pair.second;
+        const std::pair<BigInt, BigInt> &xy = modUnpair(z, mod);
+        vector.push_back(xy.first);
+        z = xy.second;
     }
 
     vector.push_back(z);
