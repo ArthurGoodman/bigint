@@ -49,14 +49,12 @@ public:
     BigInt &operator--();
     BigInt operator--(int);
 
-    BigInt pow(ulong x) const;
-    BigInt pow(const BigInt &x) const;
-
     std::string toString() const;
+
+    std::pair<BigInt, BigInt> divide(const BigInt &x) const;
 
 private:
     void normalize();
-    std::pair<BigInt, BigInt> divide(const BigInt &x) const;
 
 public:
     void dump() const;

@@ -253,14 +253,6 @@ BigInt BigInt::operator--(int) {
     return result;
 }
 
-BigInt BigInt::pow(ulong x) const {
-    return *this;
-}
-
-BigInt BigInt::pow(const BigInt &x) const {
-    return *this;
-}
-
 std::string BigInt::toString() const {
     if (data.empty())
         return "0";
@@ -270,28 +262,53 @@ std::string BigInt::toString() const {
     stream << data.back();
 
     for (int i = data.size() - 2; i >= 0; i--)
-        stream << std::string(DecimalDigitsPerBigDigit - (data[i] == 0 ? 1 : log10(data[i])), '0') << data[i];
+        stream << std::string(DecimalDigitsPerBigDigit - (data[i] == 0 ? 1 : (int)log10(data[i]) + 1), '0') << data[i];
 
     return stream.str();
-}
-
-void BigInt::normalize() {
-    for (int i = data.size() - 1; i >= 0 && data[i] == 0; i--)
-        data.pop_back();
 }
 
 std::pair<BigInt, BigInt> BigInt::divide(const BigInt &x) const {
     if (x.data.empty())
         throw std::runtime_error("division by zero");
 
-    BigInt q, r = *this;
+    if (data.empty())
+        return std::make_pair(BigInt(), BigInt());
 
-    while (r >= x) {
-        q++;
-        r -= x;
+    //    BigInt q, r = *this;
+
+    //    while (r >= x) {
+    //        q++;
+    //        r -= x;
+    //    }
+
+    //    return std::make_pair(q, r);
+
+    if (x.data.size() == 1) {
+        BigInt q, r;
+
+        q.data.resize(data.size());
+        r.data.resize(1);
+
+        ulong carry = 0;
+
+        for (int j = data.size() - 1; j >= 0; j--) {
+            q.data[j] = (carry * Base + data[j]) / x.data[0];
+            carry = (carry * Base + data[j]) - (ulong)q.data[j] * x.data[0];
+        }
+
+        r.data[0] = carry;
+
+        q.normalize();
+
+        return std::make_pair(q, r);
     }
 
-    return std::make_pair(q, r);
+    return std::make_pair(BigInt(), BigInt());
+}
+
+void BigInt::normalize() {
+    for (int i = data.size() - 1; i >= 0 && data[i] == 0; i--)
+        data.pop_back();
 }
 
 #include <iostream>
