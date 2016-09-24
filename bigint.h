@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 typedef unsigned int uint;
 typedef unsigned long long ulong;
@@ -15,11 +16,13 @@ class BigInt {
 public:
     BigInt();
     BigInt(ulong x);
+    BigInt(const char *str);
     BigInt(const std::string &str);
     BigInt(const BigInt &x);
     BigInt(BigInt &&x);
 
     BigInt &operator=(ulong x);
+    BigInt &operator=(const char *str);
     BigInt &operator=(const std::string &str);
     BigInt &operator=(const BigInt &x);
     BigInt &operator=(BigInt &&x);
@@ -49,9 +52,13 @@ public:
     BigInt &operator--();
     BigInt operator--(int);
 
+    BigInt sqrt() const;
+
     std::string toString() const;
 
     std::pair<BigInt, BigInt> divide(const BigInt &x) const;
+
+    friend std::ostream &operator <<(std::ostream &stream, const BigInt &x);
 
 private:
     void normalize();

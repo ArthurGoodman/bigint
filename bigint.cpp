@@ -10,6 +10,10 @@ BigInt::BigInt(ulong x) {
     *this = x;
 }
 
+BigInt::BigInt(const char *str) {
+    *this = str;
+}
+
 BigInt::BigInt(const std::string &str) {
     *this = str;
 }
@@ -34,6 +38,10 @@ BigInt &BigInt::operator=(ulong x) {
     } while (x > 0);
 
     return *this;
+}
+
+BigInt &BigInt::operator=(const char *str) {
+    return *this = std::string(str);
 }
 
 BigInt &BigInt::operator=(const std::string &str) {
@@ -232,8 +240,7 @@ BigInt &BigInt::operator%=(const BigInt &x) {
 }
 
 BigInt &BigInt::operator++() {
-    *this += 1;
-    return *this;
+    return *this += 1;
 }
 
 BigInt BigInt::operator++(int) {
@@ -243,14 +250,33 @@ BigInt BigInt::operator++(int) {
 }
 
 BigInt &BigInt::operator--() {
-    *this -= 1;
-    return *this;
+    return *this -= 1;
 }
 
 BigInt BigInt::operator--(int) {
     BigInt result = *this;
     --*this;
     return result;
+}
+
+BigInt BigInt::sqrt() const {
+    BigInt hi(*this);
+    BigInt lo;
+
+    BigInt mid = (hi + lo) / 2;
+    BigInt mid2 = mid * mid;
+
+    while (lo < hi - 1 && mid2 != *this) {
+        if (mid2 < *this)
+            lo = mid;
+        else
+            hi = mid;
+
+        mid = (hi + lo) / 2;
+        mid2 = mid * mid;
+    }
+
+    return mid;
 }
 
 std::string BigInt::toString() const {
@@ -304,6 +330,11 @@ std::pair<BigInt, BigInt> BigInt::divide(const BigInt &x) const {
     }
 
     return std::make_pair(BigInt(), BigInt());
+}
+
+std::ostream &operator<<(std::ostream &stream, const BigInt &x) {
+    stream << x.toString();
+    return stream;
 }
 
 void BigInt::normalize() {
