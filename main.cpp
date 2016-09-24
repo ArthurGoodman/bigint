@@ -177,6 +177,115 @@ std::vector<BigInt> modUnpairTree(const BigInt &z, int size, const BigInt &mod) 
     return result;
 }
 
+BigInt pairTreeWithOtherPartitioning(const std::vector<BigInt> &vector) {
+    if (vector.empty())
+        return (ulong)0;
+
+    if (vector.size() == 1)
+        return vector.back();
+
+    if (vector.size() == 2)
+        return pair(vector[0], vector[1]);
+
+    if (vector.size() == 3)
+        return pair(vector[0], pair(vector[1], vector[2]));
+
+    std::vector<BigInt> lo, hi;
+    int i = 0, loSize = vector.size() / 2 - (vector.size() % 2 == 0 ? 1 : 0);
+
+    for (; i < loSize; i++)
+        lo.push_back(vector[i]);
+
+    for (; i < (int)vector.size(); i++)
+        hi.push_back(vector[i]);
+
+    return pair(pairTreeWithOtherPartitioning(lo), pairTreeWithOtherPartitioning(hi));
+}
+
+std::vector<BigInt> unpairTreeWithOtherPartitioning(const BigInt &z, int size) {
+    if (size == 0)
+        return {};
+
+    if (size == 1)
+        return {z};
+
+    const std::pair<BigInt, BigInt> &xy = unpair(z);
+
+    if (size == 2)
+        return {xy.first, xy.second};
+
+    if (size == 3) {
+        const std::pair<BigInt, BigInt> &yz = unpair(xy.second);
+        return {xy.first, yz.first, yz.second};
+    }
+
+    int loSize = size / 2 - (size % 2 == 0 ? 1 : 0);
+
+    std::vector<BigInt> lo = unpairTreeWithOtherPartitioning(xy.first, loSize), hi = unpairTreeWithOtherPartitioning(xy.second, size - loSize), result;
+
+    result.insert(result.end(), lo.begin(), lo.end());
+    result.insert(result.end(), hi.begin(), hi.end());
+
+    return result;
+}
+
+BigInt modPairTreeWithOtherPartitioning(const std::vector<BigInt> &vector, const BigInt &mod) {
+    if (vector.empty())
+        return (ulong)0;
+
+    if (vector.size() == 1)
+        return vector.back();
+
+    if (vector.size() == 2)
+        return modPair(vector[0], vector[1], mod);
+
+    if (vector.size() == 3)
+        return modPair(vector[0], modPair(vector[1], vector[2], mod), mod);
+
+    std::vector<BigInt> lo, hi;
+    int i = 0, loSize = vector.size() / 2 - (vector.size() % 2 == 0 ? 1 : 0);
+
+    for (; i < loSize; i++)
+        lo.push_back(vector[i]);
+
+    for (; i < (int)vector.size(); i++)
+        hi.push_back(vector[i]);
+
+    return pair(modPairTreeWithOtherPartitioning(lo, mod), modPairTreeWithOtherPartitioning(hi, mod));
+}
+
+std::vector<BigInt> modUnpairTreeWithOtherPartitioning(const BigInt &z, int size, const BigInt &mod) {
+    if (size == 0)
+        return {};
+
+    if (size == 1)
+        return {z};
+
+    if (size == 2) {
+        const std::pair<BigInt, BigInt> &xy = modUnpair(z, mod);
+        return {xy.first, xy.second};
+    }
+
+    if (size == 3) {
+        const std::pair<BigInt, BigInt> &xw = modUnpair(z, mod);
+        const std::pair<BigInt, BigInt> &yz = modUnpair(xw.second, mod);
+        return {xw.first, yz.first, yz.second};
+    }
+
+    const std::pair<BigInt, BigInt> &xy = unpair(z);
+
+    int loSize = size / 2 - (size % 2 == 0 ? 1 : 0);
+
+    std::vector<BigInt> lo = modUnpairTreeWithOtherPartitioning(xy.first, loSize, mod), hi = modUnpairTreeWithOtherPartitioning(xy.second, size - loSize, mod);
+
+    std::vector<BigInt> result;
+
+    result.insert(result.end(), lo.begin(), lo.end());
+    result.insert(result.end(), hi.begin(), hi.end());
+
+    return result;
+}
+
 template <class T>
 void printVector(const std::vector<T> &vector) {
     for (T x : vector)
@@ -189,22 +298,32 @@ int main() {
     BigInt x = pairVector(vector);
     std::cout << x << "\n";
     printVector(unpairVector(x, vector.size()));
-    std::cout << "\n";
+    std::cout << "\n\n";
 
     x = modPairVector(vector, 256);
     std::cout << x << "\n";
     printVector(modUnpairVector(x, vector.size(), 256));
-    std::cout << "\n";
+    std::cout << "\n\n";
 
     x = pairTree(vector);
     std::cout << x << "\n";
     printVector(unpairTree(x, vector.size()));
-    std::cout << "\n";
+    std::cout << "\n\n";
 
     x = modPairTree(vector, 256);
     std::cout << x << "\n";
     printVector(modUnpairTree(x, vector.size(), 256));
-    std::cout << "\n";
+    std::cout << "\n\n";
+
+    x = pairTreeWithOtherPartitioning(vector);
+    std::cout << x << "\n";
+    printVector(unpairTreeWithOtherPartitioning(x, vector.size()));
+    std::cout << "\n\n";
+
+    x = modPairTreeWithOtherPartitioning(vector, 256);
+    std::cout << x << "\n";
+    printVector(modUnpairTreeWithOtherPartitioning(x, vector.size(), 256));
+    std::cout << "\n\n";
 
     return 0;
 }
