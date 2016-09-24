@@ -167,9 +167,7 @@ std::vector<BigInt> modUnpairTree(const BigInt &z, int size, const BigInt &mod) 
 
     const std::pair<BigInt, BigInt> &xy = unpair(z);
 
-    std::vector<BigInt> lo = modUnpairTree(xy.first, size / 2, mod), hi = modUnpairTree(xy.second, size - size / 2, mod);
-
-    std::vector<BigInt> result;
+    std::vector<BigInt> lo = modUnpairTree(xy.first, size / 2, mod), hi = modUnpairTree(xy.second, size - size / 2, mod), result;
 
     result.insert(result.end(), lo.begin(), lo.end());
     result.insert(result.end(), hi.begin(), hi.end());
