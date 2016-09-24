@@ -4,7 +4,10 @@ CONFIG -= qt
 CONFIG += console
 
 SOURCES += main.cpp \
-    bigint.cpp
+    bigint.cpp \
+    pairing.cpp
 
 HEADERS += \
-    bigint.h
+    bigint.h \
+    intheap.h \
+    pairing.h
