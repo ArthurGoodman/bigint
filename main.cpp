@@ -191,7 +191,7 @@ BigInt pairTreeWithOtherPartitioning(const std::vector<BigInt> &vector) {
         return pair(vector[0], pair(vector[1], vector[2]));
 
     std::vector<BigInt> lo, hi;
-    int i = 0, loSize = vector.size() / 2 - (vector.size() % 2 == 0 ? 1 : 0);
+    int i = 0, loSize = vector.size() / 2 - (vector.size() / 2 % 2 == 0 ? 0 : 1);
 
     for (; i < loSize; i++)
         lo.push_back(vector[i]);
@@ -219,7 +219,7 @@ std::vector<BigInt> unpairTreeWithOtherPartitioning(const BigInt &z, int size) {
         return {xy.first, yz.first, yz.second};
     }
 
-    int loSize = size / 2 - (size % 2 == 0 ? 1 : 0);
+    int loSize = size / 2 - (size / 2 % 2 == 0 ? 0 : 1);
 
     std::vector<BigInt> lo = unpairTreeWithOtherPartitioning(xy.first, loSize), hi = unpairTreeWithOtherPartitioning(xy.second, size - loSize), result;
 
@@ -243,7 +243,7 @@ BigInt modPairTreeWithOtherPartitioning(const std::vector<BigInt> &vector, const
         return modPair(vector[0], modPair(vector[1], vector[2], mod), mod);
 
     std::vector<BigInt> lo, hi;
-    int i = 0, loSize = vector.size() / 2 - (vector.size() % 2 == 0 ? 1 : 0);
+    int i = 0, loSize = vector.size() / 2 - (vector.size() / 2 % 2 == 0 ? 0 : 1);
 
     for (; i < loSize; i++)
         lo.push_back(vector[i]);
@@ -274,11 +274,9 @@ std::vector<BigInt> modUnpairTreeWithOtherPartitioning(const BigInt &z, int size
 
     const std::pair<BigInt, BigInt> &xy = unpair(z);
 
-    int loSize = size / 2 - (size % 2 == 0 ? 1 : 0);
+    int loSize = size / 2 - (size / 2 % 2 == 0 ? 0 : 1);
 
-    std::vector<BigInt> lo = modUnpairTreeWithOtherPartitioning(xy.first, loSize, mod), hi = modUnpairTreeWithOtherPartitioning(xy.second, size - loSize, mod);
-
-    std::vector<BigInt> result;
+    std::vector<BigInt> lo = modUnpairTreeWithOtherPartitioning(xy.first, loSize, mod), hi = modUnpairTreeWithOtherPartitioning(xy.second, size - loSize, mod), result;
 
     result.insert(result.end(), lo.begin(), lo.end());
     result.insert(result.end(), hi.begin(), hi.end());
