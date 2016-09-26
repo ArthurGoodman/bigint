@@ -72,7 +72,7 @@ std::vector<BigInt> modUnpairVector(BigInt z, int size, const BigInt &mod) {
 
 BigInt pairTree(const std::vector<BigInt> &vector) {
     if (vector.empty())
-        return (ulong)0;
+        return 0;
 
     if (vector.size() == 1)
         return vector.back();
@@ -124,7 +124,7 @@ std::vector<BigInt> unpairTree(const BigInt &z, int size) {
 
 BigInt modPairTree(const std::vector<BigInt> &vector, const BigInt &mod) {
     if (vector.empty())
-        return (ulong)0;
+        return 0;
 
     if (vector.size() == 1)
         return vector.back();
@@ -177,7 +177,7 @@ std::vector<BigInt> modUnpairTree(const BigInt &z, int size, const BigInt &mod) 
 
 BigInt pairTreeWithOtherPartitioning(const std::vector<BigInt> &vector) {
     if (vector.empty())
-        return (ulong)0;
+        return 0;
 
     if (vector.size() == 1)
         return vector.back();
@@ -229,7 +229,7 @@ std::vector<BigInt> unpairTreeWithOtherPartitioning(const BigInt &z, int size) {
 
 BigInt modPairTreeWithOtherPartitioning(const std::vector<BigInt> &vector, const BigInt &mod) {
     if (vector.empty())
-        return (ulong)0;
+        return 0;
 
     if (vector.size() == 1)
         return vector.back();

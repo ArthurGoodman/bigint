@@ -10,10 +10,6 @@ BigInt::BigInt(ulong x) {
     *this = x;
 }
 
-BigInt::BigInt(const char *str) {
-    *this = str;
-}
-
 BigInt::BigInt(const std::string &str) {
     *this = str;
 }
@@ -38,10 +34,6 @@ BigInt &BigInt::operator=(ulong x) {
     } while (x > 0);
 
     return *this;
-}
-
-BigInt &BigInt::operator=(const char *str) {
-    return *this = std::string(str);
 }
 
 BigInt &BigInt::operator=(const std::string &str) {
@@ -177,6 +169,9 @@ BigInt BigInt::operator-(const BigInt &x) const {
 }
 
 BigInt BigInt::operator*(const BigInt &x) const {
+    if (x == 0 || data.empty())
+        return BigInt();
+
     BigInt result = x * data[0];
 
     for (uint i = 1; i < data.size(); i++) {

@@ -5,9 +5,11 @@ CONFIG += console
 
 SOURCES += main.cpp \
     bigint.cpp \
-    pairing.cpp
+    pairing.cpp \
+    intmap.cpp
 
 HEADERS += \
     bigint.h \
-    intheap.h \
-    pairing.h
+    pairing.h \
+    intset.h \
+    intmap.h
