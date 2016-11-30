@@ -10,8 +10,6 @@ class IntMap {
     IntSet<comparator> set;
 
 public:
-    IntMap();
-
     void insert(const BigInt &key, const BigInt &value);
     BigInt get(const BigInt &key) const;
 

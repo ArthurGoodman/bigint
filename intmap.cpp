@@ -1,8 +1,5 @@
 #include "intmap.h"
 
-IntMap::IntMap() {
-}
-
 void IntMap::insert(const BigInt &key, const BigInt &value) {
     set.insert(pair(key, value));
 }

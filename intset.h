@@ -15,8 +15,8 @@ class IntSet {
 
 public:
     IntSet();
-    IntSet(const IntSet &heap);
-    IntSet(IntSet &&heap);
+    IntSet(const IntSet &set);
+    IntSet(IntSet &&set);
 
     void insert(const BigInt &value);
     BigInt get(const BigInt &value) const;
@@ -38,13 +38,13 @@ IntSet<less>::IntSet() {
 }
 
 template <Comparator less>
-IntSet<less>::IntSet(const IntSet &heap)
-    : data(heap.data) {
+IntSet<less>::IntSet(const IntSet &set)
+    : data(set.data) {
 }
 
 template <Comparator less>
-IntSet<less>::IntSet(IntSet &&heap)
-    : data(std::move(heap.data)) {
+IntSet<less>::IntSet(IntSet &&set)
+    : data(std::move(set.data)) {
 }
 
 template <Comparator less>

@@ -1,25 +1,43 @@
-#include "pairing.h"
+#include <vector>
+#include <algorithm>
+#include <ctime>
 
-#include "intmap.h"
+#include "gmpintmap.h"
 
 int main() {
-    IntMap map;
+    GMPIntMap map;
 
-    map.insert(2, 222);
-    map.insert(1, 111);
-    map.insert(5, 555);
-    map.insert(4, 444);
-    map.insert(3, 333);
+    const int n = 9;
 
-    std::cout << map.get(1) << "\n";
-    std::cout << map.get(2) << "\n";
-    std::cout << map.get(3) << "\n";
-    std::cout << map.get(4) << "\n";
-    std::cout << map.get(5) << "\n";
+    mpz_t k, v;
+
+    mpz_init(k);
+    mpz_init(v);
+
+
+    std::vector<int> vec(n);
+    std::iota(vec.begin(), vec.end(), 1);
+    srand(time(0));
+    std::random_shuffle(vec.begin(), vec.end());
+
+    for(int i : vec) {
+        mpz_set_ui(k, i);
+        mpz_set_ui(v, i * 111);
+        map.insert(k, v);
+    }
+
+    for (unsigned int i = 1; i <= n; i++) {
+        mpz_set_ui(k, i);
+        map.get(k, v);
+        std::cout << mpz_get_str(0, 10, v) << "\n";
+    }
 
     std::cout << "\n";
 
     map.dump();
+
+    mpz_clear(k);
+    mpz_clear(v);
 
     return 0;
 }
