@@ -1,7 +1,8 @@
 #include "bigint.h"
 
-#include <sstream>
+#include <climits>
 #include <cmath>
+#include <sstream>
 
 BigInt::BigInt() {
 }

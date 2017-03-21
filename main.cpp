@@ -1,6 +1,6 @@
-#include <vector>
 #include <algorithm>
 #include <ctime>
+#include <vector>
 
 #include "gmpintmap.h"
 
@@ -14,13 +14,12 @@ int main() {
     mpz_init(k);
     mpz_init(v);
 
-
     std::vector<int> vec(n);
     std::iota(vec.begin(), vec.end(), 1);
     srand(time(0));
     std::random_shuffle(vec.begin(), vec.end());
 
-    for(int i : vec) {
+    for (int i : vec) {
         mpz_set_ui(k, i);
         mpz_set_ui(v, i * 111);
         map.insert(k, v);

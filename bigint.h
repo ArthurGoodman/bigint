@@ -1,11 +1,8 @@
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
-
-typedef unsigned int uint;
-typedef unsigned long long ulong;
 
 class BigInt {
     static const uint Base = 1e9;

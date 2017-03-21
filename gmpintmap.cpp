@@ -1,4 +1,4 @@
-#include "GMPIntMap.h"
+#include "gmpintmap.h"
 
 void GMPIntMap::insert(mpz_t key, mpz_t value) {
     mpz_t p;

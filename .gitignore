@@ -2,3 +2,5 @@ Makefile*
 *.user
 *.o
 *.exe
+*.stash
+/bigint

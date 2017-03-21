@@ -1,7 +1,8 @@
 #pragma once
 
-#include "gmppairing.h"
 #include <iostream>
+
+#include "gmppairing.h"
 
 typedef bool (*Comparator)(const mpz_t a, const mpz_t b);
 
